@@ -14,17 +14,22 @@ const apiKey = null
 
 app.get('/api/data', async (req, res) => {
     try {
-        const response = await fetch('https://api.football-data.org/v4/competitions/SA/scorers',
-            {
-                headers: {
-                    "X-Auth-Token": apiKey
-                }
-            });
-        const data = await response.json();
+        if (apiKey) {
 
-        res.json(apiKey ? data : localData);
+            const response = await fetch('https://api.football-data.org/v4/competitions/SA/scorers',
+                {
+                    headers: {
+                        "X-Auth-Token": apiKey
+                    }
+                });
+            const data = await response.json();
+            res.json(data);
+            return
+        }
+
+        res.json(localData);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch data' });
+        res.status(500).json({error: 'Failed to fetch data'});
     }
 });
 
